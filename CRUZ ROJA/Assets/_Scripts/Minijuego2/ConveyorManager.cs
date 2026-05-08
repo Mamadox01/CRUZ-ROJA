@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
+using UnityEngine.Rendering.Universal;
+using UnityEngine.Rendering;
 
 public class ConveyorManager : MonoBehaviour
 {
@@ -20,6 +22,8 @@ public class ConveyorManager : MonoBehaviour
 
     private int totalScore = 0;
     private bool isGameActive = false;
+    public GameObject globalVolume;
+
 
     void Start()
     {
@@ -80,10 +84,20 @@ public class ConveyorManager : MonoBehaviour
     public void SubtractScore(int amount)
     {
         if(!isGameActive) return;
-        totalScore -= amount;
+        totalScore -= amount;   
+        Activarpantallazo();
+        Invoke("OcultarPantallazo", 1f);
         UpdateUI();
     }
 
+    void Activarpantallazo()
+    {
+        globalVolume.SetActive(true);
+    }
+    void OcultarPantallazo()
+    {
+        globalVolume.SetActive(false);
+    }
     void EndGame()
     {
         isGameActive = false;
