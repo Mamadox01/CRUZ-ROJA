@@ -13,6 +13,7 @@ public class RunnerPlayer : MonoBehaviour
     private Rigidbody2D rb;
     private bool isGrounded; // ¿Está tocando el suelo?
     private RunnerManager manager;
+    public Animator animator;
 
     void Start()
     {
@@ -32,7 +33,9 @@ public class RunnerPlayer : MonoBehaviour
         {
             rb.velocity = new Vector2(rb.velocity.x, 0); // Resetea velocidad vertical antes de saltar
             rb.AddForce(new Vector2(0f, jumpForce), ForceMode2D.Impulse);
+            
         }
+        animator.SetBool("Saltar", isGrounded);
     }
 
     // Detectar colisión con un obstáculo
@@ -58,7 +61,7 @@ public class RunnerPlayer : MonoBehaviour
 
     void ResetColor()
     {
-        GetComponent<SpriteRenderer>().color = Color.green; // O tu color original
+        GetComponent<SpriteRenderer>().color = Color.white; // O tu color original
     }
 
     // Dibuja el radio de detección de suelo en el editor para que lo veas
