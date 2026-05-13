@@ -6,17 +6,15 @@ using UnityEngine.SceneManagement;
 
 public class WaterPurifierManager : MonoBehaviour
 {
-    [Header("Configuración del Juego")]
     public int maxRounds = 3;
     public int pillsPerRound = 5;
     public int contaminatedPerRound = 2;
-
-    [Header("Invocación (Prefabs y Spawns)")]
-    public GameObject bottlePrefab; 
-    public Transform[] spawnPoints;
     
+    [Header("Invocación (Prefabs y Spawns)")]
+    public GameObject bottlePrefab;     
+    public Transform[] spawnPoints;     
+
     [Header("UI")]
-    public List<Bottle> allBottles;
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI pillsText;
     public TextMeshProUGUI roundText;
@@ -24,7 +22,9 @@ public class WaterPurifierManager : MonoBehaviour
     private int currentRound = 1;
     private int totalScore = 0;
     private int currentPills;
-    private int contaminatedBottlesLeft; // Cuántas botellas sucias
+    private int contaminatedBottlesLeft;
+    private bool isGameOver = false; // Para evitar que se llame al final dos veces
+    
     private List<GameObject> spawnedBottles = new List<GameObject>();
 
     void Start()
@@ -39,20 +39,16 @@ public class WaterPurifierManager : MonoBehaviour
         
         SpawnBottles();
         UpdateUI();
-        
-        Debug.Log("Ronda " + currentRound + " iniciada.");
     }
 
     void SpawnBottles()
     {
-        // 1. Destruimos las botellas de la ronda anterior para limpiar la pantalla
         foreach (GameObject b in spawnedBottles)
         {
             Destroy(b);
         }
-        spawnedBottles.Clear(); // Limpiamos la lista
+        spawnedBottles.Clear(); 
 
-        // 2. Elegimos al azar qué posiciones tendrán el agua contaminada
         List<int> contaminatedIndices = new List<int>();
         while (contaminatedIndices.Count < contaminatedPerRound)
         {
@@ -63,24 +59,16 @@ public class WaterPurifierManager : MonoBehaviour
             }
         }
 
-        // 3. Invocamos (Instanciamos) las botellas en cada Spawn Point
         for (int i = 0; i < spawnPoints.Length; i++)
         {
-            // Crea la botella exactamente en la posición del Spawn Point
             GameObject newBottle = Instantiate(bottlePrefab, spawnPoints[i].position, Quaternion.identity);
             spawnedBottles.Add(newBottle);
 
-            // Obtenemos el script de la botella para asignarle su tipo
             Bottle bottleScript = newBottle.GetComponent<Bottle>();
-
             if (contaminatedIndices.Contains(i))
-            {
                 bottleScript.ResetBottle(Bottle.BottleType.Contaminated);
-            }
             else
-            {
                 bottleScript.ResetBottle(Bottle.BottleType.Potable);
-            }
         }
     }
 
@@ -107,13 +95,15 @@ public class WaterPurifierManager : MonoBehaviour
 
     public void CheckRoundCompletion()
     {
-       if (contaminatedBottlesLeft <= 0)
+        if (isGameOver) return;
+
+        if (contaminatedBottlesLeft <= 0)
         {
-            Invoke("NextRound", 0.5f); // Pausa pequeña para que se vea el cambio
+            Invoke("NextRound", 0.5f); 
         }
         else if (currentPills <= 0)
         {
-            Debug.Log("Sin pastillas. Fin del juego.");
+            EndGame(); // Llamamos al final del juego porque perdimos
         }
     }
 
@@ -122,24 +112,47 @@ public class WaterPurifierManager : MonoBehaviour
         currentRound++;
         if (currentRound > maxRounds)
         {
-            Debug.Log("¡Minijuego Terminado! Puntaje Final: " + totalScore);
-            Invoke("VolverAlMapa", 2.0f);
+            EndGame(); // Llamamos al final del juego porque ganamos
         }
         else
         {
-            StartRound(); 
+            StartRound();
         }
+    }
+
+    // --- NUEVA LÓGICA DE RÉCORD Y MAPA ---
+    void EndGame()
+    {
+        isGameOver = true;
+        
+        // 1. Buscamos el récord anterior
+        int recordAnterior = PlayerPrefs.GetInt("Record_Mini1", 0); 
+
+        // 2. Comparamos y guardamos
+        if (totalScore > recordAnterior)
+        {
+            PlayerPrefs.SetInt("Record_Mini1", totalScore);
+            PlayerPrefs.Save(); 
+            Debug.Log("¡Nuevo Récord Alcanzado!: " + totalScore);
+        }
+        else
+        {
+            Debug.Log("No superaste tu récord. Tu récord sigue siendo: " + recordAnterior);
+        }
+
+        // 3. Volvemos al mapa después de 2.5 segundos
+        Invoke("VolverAlMapa", 2.5f);
+    }
+
+    void VolverAlMapa()
+    {
+        SceneTransition.instance.CambiarEscena("MapaCentral"); 
     }
 
     void UpdateUI()
     {
-        if(scoreText != null) scoreText.text = "Puntos: " + totalScore;
-        if(pillsText != null) pillsText.text = "Pastillas: " + currentPills;
-        if(roundText != null) roundText.text = "Ronda: " + currentRound + "/" + maxRounds;
+        if(scoreText) scoreText.text = "Puntos: " + totalScore;
+        if(pillsText) pillsText.text = "Pastillas: " + currentPills;
+        if(roundText) roundText.text = "Ronda: " + currentRound + "/" + maxRounds;
     }
-    void VolverAlMapa()
-{
-    // Escribe aquí el nombre exacto de tu escena del mapa
-    SceneManager.LoadScene("MapaCentral");
-}
 }

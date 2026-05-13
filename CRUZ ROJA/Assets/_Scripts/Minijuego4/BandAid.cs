@@ -10,7 +10,7 @@ public class BandAid : MonoBehaviour
     void OnMouseDrag()
     {
         // Solo deja mover la curita si el juego está activo y ya se limpió la herida
-        if (!manager.isGameActive || !manager.isCleaned) return;
+        if (!manager.isRoundActive || !manager.isCleaned) return;
 
         Vector3 currentMousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         currentMousePos.z = 0;
@@ -19,7 +19,7 @@ public class BandAid : MonoBehaviour
 
     void OnMouseUp()
     {
-        if (!manager.isGameActive || !manager.isCleaned) return;
+        if (!manager.isRoundActive || !manager.isCleaned) return;
 
         // Comprueba si soltaste la curita cerca del centro de la herida
         float distanceToWound = Vector3.Distance(transform.position, targetWound.transform.position);
@@ -28,7 +28,7 @@ public class BandAid : MonoBehaviour
         {
             // Hace "Snap" (se pega exactamente en el centro de la herida)
             transform.position = targetWound.transform.position;
-            manager.Win();
+            manager.WinRound();
         }
     }
 }

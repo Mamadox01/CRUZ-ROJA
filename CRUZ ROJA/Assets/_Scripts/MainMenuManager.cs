@@ -17,8 +17,7 @@ public class MainMenuManager : MonoBehaviour
     // Función para el botón START
     public void StartGame()
     {
-        // Cambia "MapaCentral" por el nombre exacto de tu escena de mapa
-        SceneManager.LoadScene("MapaCentral");
+        SceneTransition.instance.CambiarEscena("MapaCentral");
     }
 
     // Función para el botón CREDITS

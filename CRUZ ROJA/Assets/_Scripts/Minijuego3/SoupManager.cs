@@ -84,7 +84,20 @@ public class SoupManager : MonoBehaviour
     void EndGame()
     {
         isGameActive = false;
-        Debug.Log("¡Tiempo terminado! Sopa finalizada. Puntos: " + totalScore);
+        int recordAnterior = PlayerPrefs.GetInt("Record_Mini3", 0);
+        if (totalScore > recordAnterior)
+        {
+            // ¡Nuevo récord! Lo guardamos con la MISMA clave que usamos en el mapa ("Record_Mini2")
+            PlayerPrefs.SetInt("Record_Mini3", totalScore);
+            PlayerPrefs.Save(); // Esto obliga al celular a guardar los datos de inmediato
+            
+            Debug.Log("¡Nuevo Récord Alcanzado!: " + totalScore);
+            // Aquí podrías incluso activar un texto en pantalla que diga "¡NUEVO RÉCORD!"
+        }
+        else
+        {
+            Debug.Log("Tu récord sigue siendo: " + recordAnterior);
+        }
         if (timeText) timeText.text = "¡FIN!";
         Invoke("VolverAlMapa", 3.0f);
     }
@@ -95,8 +108,7 @@ public class SoupManager : MonoBehaviour
         if (timeText) timeText.text = "Tiempo: " + gameTime;
     }
     void VolverAlMapa()
-{
-    // Escribe aquí el nombre exacto de tu escena del mapa
-    SceneManager.LoadScene("MapaCentral");
-}
+    {
+        SceneTransition.instance.CambiarEscena("MapaCentral");
+    }
 }

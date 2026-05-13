@@ -14,6 +14,7 @@ public class RunnerManager : MonoBehaviour
     public Transform playerTransform; // Arrastra al Jugador aquí
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI gameOverText;
+    private bool isGameOverTriggered = false;
 
     public bool isGameActive = true;
     private float totalScore = 0f;
@@ -21,8 +22,9 @@ public class RunnerManager : MonoBehaviour
     void Start()
     {
         isGameActive = true;
+        isGameOverTriggered = false;
+        Time.timeScale = 1f;
         if(gameOverText) gameOverText.enabled = false;
-        if(scoreText) scoreText.text = "Puntos: 0";
     }
 
     void Update()
@@ -51,19 +53,26 @@ public class RunnerManager : MonoBehaviour
         newPos.x -= pushDistance; // Restamos distancia
         playerTransform.position = newPos;
 
-        Debug.Log("¡Empujado hacia atrás!");
     }
 
     void EndGame()
     {
         isGameActive = false;
+        isGameOverTriggered = true;
         if(gameOverText) gameOverText.enabled = true;
-        
-        // Efecto visual: paramos el tiempo (opcional)
+
+        int puntajeFinal = (int)totalScore;
+        int recordAnterior = PlayerPrefs.GetInt("Record_Mini5", 0); 
+
+        // 2. Comparamos y guardamos
+        if (puntajeFinal > recordAnterior)
+        {
+            PlayerPrefs.SetInt("Record_Mini5", puntajeFinal);
+            PlayerPrefs.Save(); 
+            Debug.Log("¡Nuevo Récord Alcanzado!: " + puntajeFinal);
+        }
+         // Efecto visual: paramos el tiempo (opcional)
         Time.timeScale = 0.2f; // Cámara lenta para el drama
-
-        Debug.Log("¡Game Over! Puntos final: " + (int)totalScore);
-
         // Volver al mapa en 2 segundos (tomando en cuenta la cámara lenta)
         Invoke("VolverAlMapa", 1.0f); 
     }
@@ -71,6 +80,6 @@ public class RunnerManager : MonoBehaviour
     void VolverAlMapa()
     {
         Time.timeScale = 1f; // Restauramos el tiempo normal
-        SceneManager.LoadScene("MapaCentral"); // Pon el nombre exacto de tu escena
+        SceneTransition.instance.CambiarEscena("MapaCentral"); // Pon el nombre exacto de tu escena
     }
 }

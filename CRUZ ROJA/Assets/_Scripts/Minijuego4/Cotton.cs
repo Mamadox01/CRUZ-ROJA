@@ -17,7 +17,7 @@ public class Cotton : MonoBehaviour
 
     void OnMouseDrag()
     {
-        if (!manager.isGameActive || manager.isCleaned) return;
+        if (!manager.isRoundActive || manager.isCleaned) return;
 
         // Seguir el dedo/mouse
         Vector3 currentMousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);

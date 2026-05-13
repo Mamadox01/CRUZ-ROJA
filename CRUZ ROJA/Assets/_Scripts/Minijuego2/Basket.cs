@@ -13,6 +13,7 @@ public class Basket : MonoBehaviour
 
     void Update()
     {
+        if (Time.timeScale == 0f) return;
         // Movimiento táctil o con el clic sostenido del mouse
         if (Input.GetMouseButton(0))
         {

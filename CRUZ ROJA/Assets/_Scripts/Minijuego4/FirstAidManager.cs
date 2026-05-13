@@ -6,52 +6,133 @@ using UnityEngine.SceneManagement;
 
 public class FirstAidManager : MonoBehaviour
 {
-    public float timer = 3f;
-    public bool isGameActive = true;
-    public bool isCleaned = false; // ¿Ya se limpió la herida?
-    
+   [Header("Configuración de Rondas")]
+    public int maxRounds = 3;
+    public float[] timesPerRound;
+    private int currentRound = 1;
+    private float totalTimeSaved = 0f;
+
+    [Header("Elementos a Randomizar")]
+    public GameObject herida;
+    public GameObject algodon;
+    public GameObject curita;
+
+    [Header("Límites de Pantalla (Rango Aleatorio)")]
+    public float minX = -6f;
+    public float maxX = 6f;
+    public float minY = -3f;
+    public float maxY = 3f;
+
+    [Header("UI")]
     public TextMeshProUGUI timeText;
-    public TextMeshProUGUI statusText; // Para mostrar "¡Ganaste!" o "¡Perdiste!"
+    public TextMeshProUGUI statusText;
+    public TextMeshProUGUI roundText;
+
+    private float currentTimer;
+    public bool isRoundActive = false;
+    public bool isCleaned = false;
+    private bool isGameOver = false;
 
     void Start()
     {
-        if(statusText) statusText.text = "¡Limpia y pon la curita!";
+        Time.timeScale = 1f;
+        currentRound = 1;
+        totalTimeSaved = 0f;
+        if (timesPerRound == null || timesPerRound.Length < maxRounds)
+        {
+            Debug.LogError("¡Oye mi rey! Falta configurar los tiempos en el arreglo 'Times Per Round'.");
+        }
+        StartNewRound();
+    }
+
+    void StartNewRound()
+    {
+        isRoundActive = true;
+        isCleaned = false;
+
+        currentTimer = timesPerRound[currentRound - 1];
+        
+        if (roundText) roundText.text = "Ronda: " + currentRound + "/" + maxRounds;
+        if (statusText) statusText.text = "¡Rápido!";
+
+        // En rondas 2 y 3, movemos las cosas de lugar
+        if (currentRound > 1)
+        {
+            RandomizeElements();
+        }
+
+        // Resetear estado de la herida
+        herida.GetComponent<Wound>().ResetWound();
     }
 
     void Update()
     {
-        if (!isGameActive) return;
+        if (!isRoundActive || isGameOver) return;
 
-        timer -= Time.deltaTime; // Resta el tiempo real
-        
-        if (timeText) 
-            timeText.text = timer.ToString("F1") + "s"; // Muestra con 1 decimal (ej: 2.5s)
+        currentTimer -= Time.deltaTime;
+        if (timeText) timeText.text = currentTimer.ToString("F1") + "s";
 
-        if (timer <= 0)
+        if (currentTimer <= 0)
         {
-            Lose();
+            LoseGame();
         }
     }
 
-    public void Win()
+    // Se llama desde la curita cuando se pone bien
+    public void WinRound()
     {
-        isGameActive = false;
-        if(statusText) statusText.text = "¡Salvado!";
-        Debug.Log("¡Minijuego Superado!");
-        Invoke("VolverAlMapa", 2.5f);
-        // Aquí volverías al MapManager
+        if (!isRoundActive) return;
+        isRoundActive = false;
+
+        totalTimeSaved += currentTimer; // Acumulamos el tiempo que sobró
+        
+        if (currentRound >= maxRounds)
+        {
+            WinGame();
+        }
+        else
+        {
+            currentRound++;
+            statusText.text = "¡Bien! Siguiente...";
+            Invoke("StartNewRound", 0.8f);
+        }
     }
 
-    public void Lose()
+    void RandomizeElements()
     {
-        isGameActive = false;
-        if(statusText) statusText.text = "¡Muy lento! Perdiste.";
-        Debug.Log("¡Tiempo agotado!");
-        Invoke("VolverAlMapa", 2.5f);
+        // Movemos la herida a un punto al azar
+        herida.transform.position = new Vector3(Random.Range(minX, maxX), Random.Range(minY, maxY), 0);
+        
+        // Movemos el algodón y la curita a otros puntos para que no estorben
+        algodon.transform.position = new Vector3(Random.Range(minX, maxX), Random.Range(minY, maxY), 0);
+        curita.transform.position = new Vector3(Random.Range(minX, maxX), Random.Range(minY, maxY), 0);
     }
+
+    void WinGame()
+    {
+        isGameOver = true;
+        statusText.text = "¡Excelente!";
+
+        // GUARDAR SCOREBOARD (Tiempo total ahorrado en las 3 rondas)
+        float mejorRecord = PlayerPrefs.GetFloat("Record_Mini4", 0f);
+        if (totalTimeSaved > mejorRecord)
+        {
+            PlayerPrefs.SetFloat("Record_Mini4", totalTimeSaved);
+            PlayerPrefs.Save();
+        }
+
+        Invoke("VolverAlMapa", 2.0f);
+    }
+
+    void LoseGame()
+    {
+        isGameOver = true;
+        statusText.text = "¡Muy lento!";
+        Invoke("VolverAlMapa", 2.0f);
+    }
+
     void VolverAlMapa()
-{
-    // Escribe aquí el nombre exacto de tu escena del mapa
-    SceneManager.LoadScene("MapaCentral");
-}
+    {
+        SceneTransition.instance.CambiarEscena("MapaCentral");
+    }
 }

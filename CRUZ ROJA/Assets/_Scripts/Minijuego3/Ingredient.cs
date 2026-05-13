@@ -7,14 +7,34 @@ public class Ingredient : MonoBehaviour
     [Header("Configuración")]
     public bool isHealthy; // True = Verdura, False = Chatarra
     public float fallSpeed = 5f;
-    
+    [Header("Colección de Sprites")]
+    public Sprite[] goodSprites; // Lista de dibujos para ingredientes ricos (papa, pollo, tomate)
+    public Sprite[] badSprites;  // Lista de dibujos para cosas asquerosas (mosca, zapato, basura)
+
     private SpriteRenderer sr;
 
     void Start()
     {
         sr = GetComponent<SpriteRenderer>();
-        // Solo visual para las pruebas: Verde es sano, Rojo es chatarra
-        sr.color = isHealthy ? Color.green : Color.red; 
+        if (isHealthy)
+        {
+            if (goodSprites.Length > 0)
+            {
+                int randomGood = Random.Range(0, goodSprites.Length);
+                sr.sprite = goodSprites[randomGood];
+                
+            }
+        }
+        else
+        {
+            if (badSprites.Length > 0)
+            {
+                int randomBad = Random.Range(0, badSprites.Length);
+                sr.sprite = badSprites[randomBad];
+            }
+        }
+        sr.color = Color.white;
+
     }
 
     void Update()

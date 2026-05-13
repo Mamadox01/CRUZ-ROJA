@@ -173,3 +173,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isHealthy: 0
   fallSpeed: 5
+  goodSprites:
+  - {fileID: -142523777, guid: c0fca058c85a61a41b47377833328dec, type: 3}
+  - {fileID: -389996941, guid: c0fca058c85a61a41b47377833328dec, type: 3}
+  - {fileID: -1099562999, guid: c0fca058c85a61a41b47377833328dec, type: 3}
+  - {fileID: 2146179268, guid: c0fca058c85a61a41b47377833328dec, type: 3}
+  - {fileID: 1499170309, guid: c0fca058c85a61a41b47377833328dec, type: 3}
+  badSprites:
+  - {fileID: -1805626024, guid: c0fca058c85a61a41b47377833328dec, type: 3}
+  - {fileID: -583755635, guid: c0fca058c85a61a41b47377833328dec, type: 3}
+  - {fileID: 737958818, guid: c0fca058c85a61a41b47377833328dec, type: 3}

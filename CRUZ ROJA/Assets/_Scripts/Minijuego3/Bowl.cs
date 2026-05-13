@@ -21,6 +21,7 @@ public class Bowl : MonoBehaviour
 
     void Update()
     {
+        if (Time.timeScale == 0f) return;
         // Detecta si el jugador mantiene presionado el dedo/clic
         if (Input.GetMouseButtonDown(0))
         {

@@ -18,7 +18,7 @@ public class Wound : MonoBehaviour
     // El algodón llamará a esta función cuando lo froten encima
     public void ReceiveCleaning(float amount)
     {
-        if (manager.isCleaned || !manager.isGameActive) return;
+        if (manager.isCleaned || !manager.isRoundActive) return;
 
         cleanProgress += amount;
 
@@ -33,5 +33,18 @@ public class Wound : MonoBehaviour
             sr.enabled = false; // Desaparece la suciedad por completo
             Debug.Log("¡Limpio! Ahora la curita.");
         }
+    }
+    public void ResetWound()
+    {
+        // Corregida la C minúscula
+        cleanProgress = 0f; 
+    
+        // Usamos el 'sr' que ya tienes declarado en lugar de GetComponent
+        sr.enabled = true;
+        Color c = sr.color;
+        c.a = 1f;
+        sr.color = c;
+    
+        manager.isCleaned = false; 
     }
 }
