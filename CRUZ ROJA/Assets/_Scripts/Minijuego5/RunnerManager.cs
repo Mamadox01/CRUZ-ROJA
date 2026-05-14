@@ -6,6 +6,9 @@ using UnityEngine.SceneManagement;
 
 public class RunnerManager : MonoBehaviour
 {
+    
+    public AudioClip golpe;
+
     [Header("Configuración de Mecánica")]
     public float pushDistance = 2f; // Cuánta distancia retrocede al chocar
     public float gameOverXPosition = -8f; // Límite izquierdo de la pantalla
@@ -52,6 +55,9 @@ public class RunnerManager : MonoBehaviour
         Vector3 newPos = playerTransform.position;
         newPos.x -= pushDistance; // Restamos distancia
         playerTransform.position = newPos;
+        {
+            SFXManager.instance.PlaySFX(golpe);
+        }
 
     }
 

@@ -8,6 +8,8 @@ using UnityEngine.Rendering;
 
 public class ConveyorManager : MonoBehaviour
 {
+    public AudioClip sonidoAcierto;
+    public AudioClip sonidoError;
     [Header("Configuración")]
     public float gameTime = 20f;
     public float spawnDelay = 1f; // Cada cuántos segundos cae un producto nuevo
@@ -79,6 +81,11 @@ public class ConveyorManager : MonoBehaviour
         if(!isGameActive) return;
         totalScore += amount;
         UpdateUI();
+        if (SFXManager.instance != null)
+        {
+            SFXManager.instance.PlaySFX(sonidoAcierto);
+        }
+        
     }
 
     public void SubtractScore(int amount)
@@ -88,6 +95,11 @@ public class ConveyorManager : MonoBehaviour
         Activarpantallazo();
         Invoke("OcultarPantallazo", 1f);
         UpdateUI();
+        if (SFXManager.instance != null)
+        {
+            SFXManager.instance.PlaySFX(sonidoError);
+        }
+        
     }
 
     void Activarpantallazo()

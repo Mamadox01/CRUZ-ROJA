@@ -281,6 +281,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de04b464d287d4047ab67217668c6c20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  golpe: {fileID: 8300000, guid: 91db7b1b23dbde54886551003902612c, type: 3}
   pushDistance: 1.5
   gameOverXPosition: -8
   playerTransform: {fileID: 1111895788}
@@ -1149,6 +1150,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13d1ada3e28a1a5449b73b5b5b3772cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  salto: {fileID: 8300000, guid: feb3b69a227b95040a608e35e9144f0d, type: 3}
   jumpForce: 6
   groundedRadius: 0.2
   whatIsGround:

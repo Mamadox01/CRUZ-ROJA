@@ -6,6 +6,9 @@ using UnityEngine.SceneManagement;
 
 public class WaterPurifierManager : MonoBehaviour
 {
+    public AudioClip sonidoAcierto;
+    public AudioClip sonidoError;
+
     public int maxRounds = 3;
     public int pillsPerRound = 5;
     public int contaminatedPerRound = 2;
@@ -85,12 +88,24 @@ public class WaterPurifierManager : MonoBehaviour
         totalScore += amount;
         contaminatedBottlesLeft--;
         UpdateUI();
+
+        if (SFXManager.instance != null)
+        {
+            SFXManager.instance.PlaySFX(sonidoAcierto);
+        }
+
     }
 
     public void SubtractScore(int amount)
     {
         totalScore -= amount;
         UpdateUI();
+
+        if (SFXManager.instance != null)
+        {
+            SFXManager.instance.PlaySFX(sonidoError);
+        }
+
     }
 
     public void CheckRoundCompletion()

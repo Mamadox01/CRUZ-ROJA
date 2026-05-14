@@ -5,6 +5,7 @@ using UnityEngine;
 public class RunnerPlayer : MonoBehaviour
 {
 [Header("Configuración de Salto")]
+    public AudioClip salto;
     public float jumpForce = 12f; // Fuerza hacia arriba
     public float groundedRadius = 0.2f; // Radio para detectar el suelo
     public LayerMask whatIsGround; // Capa que es el suelo
@@ -33,6 +34,9 @@ public class RunnerPlayer : MonoBehaviour
         {
             rb.velocity = new Vector2(rb.velocity.x, 0); // Resetea velocidad vertical antes de saltar
             rb.AddForce(new Vector2(0f, jumpForce), ForceMode2D.Impulse);
+            {
+            SFXManager.instance.PlaySFX(salto);
+            }
             
         }
         animator.SetBool("Saltar", isGrounded);

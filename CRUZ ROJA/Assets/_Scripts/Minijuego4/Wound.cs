@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Wound : MonoBehaviour
 {
+    public AudioClip estaLimpio;
+    public AudioClip estaVendado;
     public Sprite spriteSucia;
     public Sprite spriteLimpia;
     public Sprite spriteVendada;
@@ -39,6 +41,7 @@ public class Wound : MonoBehaviour
             sr.color = c;
             manager.algodon.SetActive(false);
             Debug.Log("¡Limpio! Ahora la curita.");
+            SFXManager.instance.PlaySFX(estaLimpio);
         }
     }
     public void AplicarCurita()
@@ -48,6 +51,7 @@ public class Wound : MonoBehaviour
         
         // ¡Desaparecemos la curita de la pantalla!
         manager.curita.SetActive(false);
+        SFXManager.instance.PlaySFX(estaVendado);
     }
     public void ResetWound()
     {

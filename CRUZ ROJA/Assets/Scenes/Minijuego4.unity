@@ -467,6 +467,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e65933a902f426147bdbbb376bba719a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  estaLimpio: {fileID: 8300000, guid: 0669d99574af8a346ad1259a9a5a8e0e, type: 3}
+  estaVendado: {fileID: 8300000, guid: b76349ca02c1cb344be8aad704dd1514, type: 3}
   spriteSucia: {fileID: -875654793, guid: 35d92429500dfbd4aa6bfe3c7f14b115, type: 3}
   spriteLimpia: {fileID: 650062762, guid: 35d92429500dfbd4aa6bfe3c7f14b115, type: 3}
   spriteVendada: {fileID: 1896204296, guid: 35d92429500dfbd4aa6bfe3c7f14b115, type: 3}

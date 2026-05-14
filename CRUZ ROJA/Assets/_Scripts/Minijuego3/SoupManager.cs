@@ -6,6 +6,9 @@ using UnityEngine.SceneManagement;
 
 public class SoupManager : MonoBehaviour
 {
+    public AudioClip sonidoAcierto;
+    public AudioClip sonidoError;
+    public AudioClip olla;
     [Header("Configuración")]
     public float gameTime = 20f;
     public float spawnDelay = 1f; // Qué tan rápido caen los objetos
@@ -31,6 +34,10 @@ public class SoupManager : MonoBehaviour
         totalScore = 0;
         isGameActive = true;
         UpdateUI();
+        if (SFXManager.instance != null)
+        {
+            SFXManager.instance.PlaySFX(olla);
+        }
         
         StartCoroutine(SpawnRoutine());
         StartCoroutine(TimerRoutine());
@@ -72,6 +79,11 @@ public class SoupManager : MonoBehaviour
         if(!isGameActive) return;
         totalScore += amount;
         UpdateUI();
+        if (SFXManager.instance != null)
+        {
+            SFXManager.instance.PlaySFX(sonidoAcierto);
+        }
+        
     }
 
     public void SubtractScore(int amount)
@@ -79,6 +91,11 @@ public class SoupManager : MonoBehaviour
         if(!isGameActive) return;
         totalScore -= amount;
         UpdateUI();
+        if (SFXManager.instance != null)
+        {
+            SFXManager.instance.PlaySFX(sonidoError);
+        }
+        
     }
 
     void EndGame()

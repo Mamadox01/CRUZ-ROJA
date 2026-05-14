@@ -1179,6 +1179,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b2b4dbe38ab65742a0dc3e84afaa906, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sonidoAcierto: {fileID: 8300000, guid: 3f1915c9d9c347d4e807f232f814c803, type: 3}
+  sonidoError: {fileID: 8300000, guid: f3aaa287f1aac524fbf8e7979a2f5140, type: 3}
   gameTime: 20
   spawnDelay: 0.5
   productPrefab: {fileID: 4239259584316404792, guid: 4102d236309ccfa4f81627a15a3967c9, type: 3}

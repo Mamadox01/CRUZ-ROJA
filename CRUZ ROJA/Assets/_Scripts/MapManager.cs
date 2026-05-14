@@ -58,5 +58,26 @@ public class MapManager : MonoBehaviour
     {
         SceneTransition.instance.CambiarEscena("MenuInicio");
     }
+    public void ResetearRecords()
+    {
+        // Borramos cada clave que creamos
+        PlayerPrefs.DeleteKey("Record_Mini1");
+        PlayerPrefs.DeleteKey("Record_Mini2");
+        PlayerPrefs.DeleteKey("Record_Mini3");
+        PlayerPrefs.DeleteKey("Record_Mini4");
+        PlayerPrefs.DeleteKey("Record_Mini5");
+
+        // Opcional: Si quieres borrar ABSOLUTAMENTE TODO (incluyendo volumen y ajustes)
+        // PlayerPrefs.DeleteAll(); 
+
+        // Guardamos los cambios en el disco
+        PlayerPrefs.Save();
+
+        Debug.Log("Scoreboard reseteado con éxito.");
+
+        // ¡Súper importante! Llamamos a la función que ya teníamos para que
+        // los textos en el mapa se actualicen a 0 inmediatamente.
+        ActualizarScoreboard();
+    }
 
 }
