@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class Bowl : MonoBehaviour
 {
+    private Animator anim;
     private SoupManager manager;
-    private bool isCovered = false;
-    private SpriteRenderer sr;
+    public bool isCovered = false;
+
     
     [Header("Visuales (Temporal)")]
     public Color openColor = Color.white;
@@ -15,8 +16,7 @@ public class Bowl : MonoBehaviour
     void Start()
     {
         manager = FindObjectOfType<SoupManager>();
-        sr = GetComponent<SpriteRenderer>();
-        sr.color = openColor;
+        anim = GetComponent<Animator>();
     }
 
     void Update()
@@ -26,12 +26,12 @@ public class Bowl : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             isCovered = true;
-            sr.color = coveredColor; // Cambiar por tu Sprite de tapa luego
+            anim.SetBool("Tapada", true);
         }
         else if (Input.GetMouseButtonUp(0)) // Al soltar
         {
             isCovered = false;
-            sr.color = openColor; // Cambiar por tu Sprite de tazón abierto
+            anim.SetBool("Tapada", false);
         }
     }
 

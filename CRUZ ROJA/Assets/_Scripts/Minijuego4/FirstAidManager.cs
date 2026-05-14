@@ -55,6 +55,9 @@ public class FirstAidManager : MonoBehaviour
         if (roundText) roundText.text = "Ronda: " + currentRound + "/" + maxRounds;
         if (statusText) statusText.text = "¡Rápido!";
 
+        algodon.SetActive(true);
+        curita.SetActive(true);
+
         // En rondas 2 y 3, movemos las cosas de lugar
         if (currentRound > 1)
         {
@@ -83,17 +86,18 @@ public class FirstAidManager : MonoBehaviour
     {
         if (!isRoundActive) return;
         isRoundActive = false;
+        herida.GetComponent<Wound>().AplicarCurita();
 
         totalTimeSaved += currentTimer; // Acumulamos el tiempo que sobró
+        statusText.text = "¡Bien!";
         
         if (currentRound >= maxRounds)
         {
-            WinGame();
+            Invoke("WinGame", 1.0f);
         }
         else
         {
             currentRound++;
-            statusText.text = "¡Bien! Siguiente...";
             Invoke("StartNewRound", 0.8f);
         }
     }
