@@ -3,20 +3,39 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
+using UnityEngine.UI;
 using System;
 
 public class MapManager : MonoBehaviour
 {
+    [Header("UI Reset")]
+    public GameObject panelConfirmacion;
     public TextMeshProUGUI recordMini1;
     public TextMeshProUGUI recordMini2;
     public TextMeshProUGUI recordMini3;
     public TextMeshProUGUI recordMini4;
     public TextMeshProUGUI recordMini5;
+
+    [Header("Botones del Mapa (Imágenes)")]
+    public Image botonMini1;
+    public Image botonMini2;
+    public Image botonMini3;
+    public Image botonMini4;
+    public Image botonMini5;
+
+    [Header("Colores de Estado")]
+    public Color colorPendiente = Color.red; // Color cuando no lo ha jugado
+    public Color colorCompletado = Color.green;
     public GameObject panelAjustes;
 
     void Start()
     {
+        if (panelConfirmacion != null) 
+        {
+            panelConfirmacion.SetActive(false);
+        }
         ActualizarScoreboard();
+        ActualizarColoresBotones();
     }
 
     void ActualizarScoreboard()
@@ -31,6 +50,24 @@ public class MapManager : MonoBehaviour
             recordMini4.text = "Mejor: " + recordTime.ToString("F1") + "s";
         } 
         if (recordMini5 != null) recordMini5.text = "Récord: " + PlayerPrefs.GetInt("Record_Mini5", 0);
+    }
+    public void ActualizarColoresBotones()
+    {
+        // Usamos PlayerPrefs.HasKey para saber si el récord existe (es decir, si ya jugó)
+        if (botonMini1 != null) 
+            botonMini1.color = PlayerPrefs.HasKey("Record_Mini1") ? colorCompletado : colorPendiente;
+            
+        if (botonMini2 != null) 
+            botonMini2.color = PlayerPrefs.HasKey("Record_Mini2") ? colorCompletado : colorPendiente;
+            
+        if (botonMini3 != null) 
+            botonMini3.color = PlayerPrefs.HasKey("Record_Mini3") ? colorCompletado : colorPendiente;
+            
+        if (botonMini4 != null) 
+            botonMini4.color = PlayerPrefs.HasKey("Record_Mini4") ? colorCompletado : colorPendiente;
+            
+        if (botonMini5 != null) 
+            botonMini5.color = PlayerPrefs.HasKey("Record_Mini5") ? colorCompletado : colorPendiente;
     }
     public void CargarMinijuego(string nombreEscena)
     {
@@ -67,17 +104,27 @@ public class MapManager : MonoBehaviour
         PlayerPrefs.DeleteKey("Record_Mini4");
         PlayerPrefs.DeleteKey("Record_Mini5");
 
-        // Opcional: Si quieres borrar ABSOLUTAMENTE TODO (incluyendo volumen y ajustes)
-        // PlayerPrefs.DeleteAll(); 
-
-        // Guardamos los cambios en el disco
         PlayerPrefs.Save();
 
         Debug.Log("Scoreboard reseteado con éxito.");
 
-        // ¡Súper importante! Llamamos a la función que ya teníamos para que
-        // los textos en el mapa se actualicen a 0 inmediatamente.
         ActualizarScoreboard();
+        ActualizarColoresBotones();
+        OcultarPanelConfirmacion();
+    }
+    public void MostrarPanelConfirmacion()
+    {
+        if (panelConfirmacion != null)
+        {
+            panelConfirmacion.SetActive(true);
+        }
+    }
+    public void OcultarPanelConfirmacion()
+    {
+        if (panelConfirmacion != null)
+        {
+            panelConfirmacion.SetActive(false);
+        }
     }
 
 }

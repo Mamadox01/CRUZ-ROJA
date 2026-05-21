@@ -22,7 +22,15 @@ public class Product : MonoBehaviour
 
         if (productLight != null)
         {
-            productLight.color = isExpired ? Color.red : Color.green;
+            if (isExpired)
+            {
+                productLight.enabled = false;
+            }
+            else
+            {
+                productLight.enabled = true;
+                productLight.color = Color.green;
+            }
         }
         if (animator == null) return;
         sr = GetComponent<SpriteRenderer>();

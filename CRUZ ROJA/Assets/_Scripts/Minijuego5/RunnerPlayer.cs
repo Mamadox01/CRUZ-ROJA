@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class RunnerPlayer : MonoBehaviour
 {
-[Header("Configuración de Salto")]
+    [Header("Configuración de Salto")]
     public AudioClip salto;
     public float jumpForce = 12f; // Fuerza hacia arriba
     public float groundedRadius = 0.2f; // Radio para detectar el suelo
@@ -37,7 +37,6 @@ public class RunnerPlayer : MonoBehaviour
             {
             SFXManager.instance.PlaySFX(salto);
             }
-            
         }
         animator.SetBool("Saltar", isGrounded);
     }

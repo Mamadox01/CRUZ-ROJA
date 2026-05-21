@@ -6,7 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class RunnerManager : MonoBehaviour
 {
-    
+    private Animator anim;
+    private bool yaPerdio = false;
     public AudioClip golpe;
 
     [Header("Configuración de Mecánica")]
@@ -28,6 +29,10 @@ public class RunnerManager : MonoBehaviour
         isGameOverTriggered = false;
         Time.timeScale = 1f;
         if(gameOverText) gameOverText.enabled = false;
+        if (playerTransform != null)
+        {
+            anim = playerTransform.GetComponent<Animator>();
+        }
     }
 
     void Update()
@@ -58,7 +63,6 @@ public class RunnerManager : MonoBehaviour
         {
             SFXManager.instance.PlaySFX(golpe);
         }
-
     }
 
     void EndGame()
@@ -69,7 +73,7 @@ public class RunnerManager : MonoBehaviour
 
         int puntajeFinal = (int)totalScore;
         int recordAnterior = PlayerPrefs.GetInt("Record_Mini5", 0); 
-
+        MorirAnim();
         // 2. Comparamos y guardamos
         if (puntajeFinal > recordAnterior)
         {
@@ -77,12 +81,24 @@ public class RunnerManager : MonoBehaviour
             PlayerPrefs.Save(); 
             Debug.Log("¡Nuevo Récord Alcanzado!: " + puntajeFinal);
         }
+        
          // Efecto visual: paramos el tiempo (opcional)
         Time.timeScale = 0.2f; // Cámara lenta para el drama
         // Volver al mapa en 2 segundos (tomando en cuenta la cámara lenta)
         Invoke("VolverAlMapa", 1.0f); 
     }
 
+    void MorirAnim()
+    {
+        if (yaPerdio) return; // Si ya se activó, no hace nada más
+        yaPerdio = true;
+
+        // ¡ACTIVAMOS LA ANIMACIÓN DE DERROTA!
+        if (anim != null)
+        {
+            anim.SetTrigger("Derrota");
+        }
+    }
     void VolverAlMapa()
     {
         Time.timeScale = 1f; // Restauramos el tiempo normal

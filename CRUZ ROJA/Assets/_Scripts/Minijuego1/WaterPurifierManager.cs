@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class WaterPurifierManager : MonoBehaviour
 {
+    [Header("Feedback Visual")]
+    public TextMeshProUGUI textoFeedback;
     public AudioClip sonidoAcierto;
     public AudioClip sonidoError;
 
@@ -118,6 +120,7 @@ public class WaterPurifierManager : MonoBehaviour
         }
         else if (currentPills <= 0)
         {
+            MostrarFeedback("¡Te quedaste sin pastillas!");
             EndGame(); // Llamamos al final del juego porque perdimos
         }
     }
@@ -127,6 +130,7 @@ public class WaterPurifierManager : MonoBehaviour
         currentRound++;
         if (currentRound > maxRounds)
         {
+            MostrarFeedback("¡Agua 100% purificada!");
             EndGame(); // Llamamos al final del juego porque ganamos
         }
         else
@@ -154,7 +158,7 @@ public class WaterPurifierManager : MonoBehaviour
         {
             Debug.Log("No superaste tu récord. Tu récord sigue siendo: " + recordAnterior);
         }
-
+        MostrarFeedback("Fin del juego");
         // 3. Volvemos al mapa después de 2.5 segundos
         Invoke("VolverAlMapa", 2.5f);
     }
@@ -169,5 +173,25 @@ public class WaterPurifierManager : MonoBehaviour
         if(scoreText) scoreText.text = "Puntos: " + totalScore;
         if(pillsText) pillsText.text = "Pastillas: " + currentPills;
         if(roundText) roundText.text = "Ronda: " + currentRound + "/" + maxRounds;
+    }
+    public void MostrarFeedback(string mensaje)
+    {
+        if (textoFeedback != null)
+        {
+            textoFeedback.text = mensaje;
+            
+            // Detenemos el contador por si el jugador hace muchos clics rápidos
+            StopCoroutine("LimpiarFeedback"); 
+            // Iniciamos el contador para borrar el texto
+            StartCoroutine("LimpiarFeedback");
+        }
+    }
+    private System.Collections.IEnumerator LimpiarFeedback()
+    {
+        yield return new WaitForSeconds(2f); // Cambia este 2f si quieres que dure más o menos
+        if (textoFeedback != null) 
+        {
+            textoFeedback.text = "";
+        }
     }
 }
