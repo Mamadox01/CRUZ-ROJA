@@ -53,7 +53,7 @@ public class FirstAidManager : MonoBehaviour
         currentTimer = timesPerRound[currentRound - 1];
         
         if (roundText) roundText.text = "Ronda: " + currentRound + "/" + maxRounds;
-        if (statusText) statusText.text = "¡Rápido!";
+        if (statusText) statusText.text = "¡Veloz!";
 
         algodon.SetActive(true);
         curita.SetActive(true);
