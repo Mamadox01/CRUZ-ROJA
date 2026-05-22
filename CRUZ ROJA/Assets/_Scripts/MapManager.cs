@@ -41,15 +41,15 @@ public class MapManager : MonoBehaviour
     void ActualizarScoreboard()
     {
         // PlayerPrefs.GetInt busca un número guardado. Si no existe (es la primera vez que juega), devuelve un 0.
-        if (recordMini1 != null) recordMini1.text = "Récord: " + PlayerPrefs.GetInt("Record_Mini1", 0);
-        if (recordMini2 != null) recordMini2.text = "Récord: " + PlayerPrefs.GetInt("Record_Mini2", 0);
-        if (recordMini3 != null) recordMini3.text = "Récord: " + PlayerPrefs.GetInt("Record_Mini3", 0);
+        if (recordMini1 != null) recordMini1.text = "Mejor: " + PlayerPrefs.GetInt("Record_Mini1", 0);
+        if (recordMini2 != null) recordMini2.text = "Mejor: " + PlayerPrefs.GetInt("Record_Mini2", 0);
+        if (recordMini3 != null) recordMini3.text = "Mejor: " + PlayerPrefs.GetInt("Record_Mini3", 0);
         if (recordMini4 != null)
         {
             float recordTime = PlayerPrefs.GetFloat("Record_Mini4", 0f);
             recordMini4.text = "Mejor: " + recordTime.ToString("F1") + "s";
         } 
-        if (recordMini5 != null) recordMini5.text = "Récord: " + PlayerPrefs.GetInt("Record_Mini5", 0);
+        if (recordMini5 != null) recordMini5.text = "Mejor: " + PlayerPrefs.GetInt("Record_Mini5", 0);
     }
     public void ActualizarColoresBotones()
     {
